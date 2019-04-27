@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
@@ -92,20 +93,23 @@ public class GeneralNotification {
                 notification.icon = mIcon;
                 notification.flags |= mFlags;
                 //notification.setLatestEventInfo(this, aInfo.mFilename, contentText, pi);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT <= LOLLIPOP_MR1) {
-                //  SDK_INT >= 16 && SDK_INT < 22
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                //  SDK_INT >= 16 && SDK_INT < 22   (4.4-->19)
                 notification = new Notification.Builder(context)
                         .setAutoCancel(mAutoCancel)
-                        .setContentIntent(mContentIntent)
+                        .setContentTitle(mContentTitle)
+                        .setContentText(mContentText)
                         .setSmallIcon(mIcon)
+                        .setContentIntent(mContentIntent)
                         .setWhen(System.currentTimeMillis())
                         .build();
-            } else if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                // SDK_INT >= 22 &&  SDK_INT < 26
+            } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 && Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+                // SDK_INT >= 22 &&  SDK_INT < 26   (6.0-->23)
                 notification = new NotificationCompat.Builder(context)
                         .setContentTitle(mContentTitle)
                         .setContentText(mContentText)
                         .setSmallIcon(mIcon)
+                        .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), mIcon))
                         .setContentIntent(mContentIntent)
                         .setWhen(System.currentTimeMillis())
                         .build();
